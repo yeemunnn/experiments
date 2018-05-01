@@ -1,0 +1,67 @@
+import oscP5.*;
+import processing.video.*;
+
+Movie myMovie;
+OscP5 oscP5;
+PFont font;
+
+int currentClass;
+String textDisplay;
+Boolean moviePlaying;
+
+void setup() {
+  size(500, 300);
+  oscP5 = new OscP5(this,8000);
+  font = loadFont("CircularStd-Medium-24.vlw");
+  textFont(font);
+}
+
+void processConvnetResults() {
+  if (currentClass == 1) {    
+    //Water
+    println("Water");
+  } else if (currentClass == 2) {
+    //Hair
+    println("Hair");
+  } else if (currentClass == 3 
+  ) {
+    //None
+    println("Nothing");
+  }}
+  
+  void oscEvent(OscMessage theOscMessage) {
+  if (theOscMessage.checkAddrPattern("/classification") == true) {
+    if (theOscMessage.get(0).intValue() == currentClass) {
+      return;
+    }
+    currentClass = theOscMessage.get(0).intValue();
+    println(currentClass);
+    processConvnetResults();
+  }
+}
+void textDisplay(){
+  if (currentClass==1){
+  myMovie = new Movie(this, "good.mov");
+  myMovie.play();
+  myMovie.jump(2);
+  image(myMovie, 10, 15);
+}
+  else if (currentClass==2){
+  myMovie = new Movie(this, "stopit.mov");
+  myMovie.play();
+  myMovie.jump(3);
+  image(myMovie, 62.5, 62.5);
+}
+  else if (currentClass==3){
+  text(" ",100,100);}
+}
+
+void draw() {
+  background(0);
+  textAlign(CENTER);
+  textDisplay();
+}
+
+void movieEvent(Movie m) {
+  m.read();
+}
